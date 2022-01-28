@@ -11,7 +11,9 @@
         "filament/forms": "^2.9",
         "filament/tables": "^2.9",
         "fruitcake/laravel-cors": "^2.0",
+        "graham-campbell/github": "^10.5",
         "guzzlehttp/guzzle": "^7.0.1",
+        "http-interop/http-factory-guzzle": "^1.0",
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5"
