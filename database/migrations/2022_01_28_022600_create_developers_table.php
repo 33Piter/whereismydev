@@ -1,0 +1,38 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateDevelopersTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('developers', function (Blueprint $table) {
+            $table->id();
+            $table->string('github_id')->unique()->nullable();
+            $table->string('github_user_name')->unique();
+            $table->string('github_profile_url')->unique()->nullable();
+            $table->string('avatar')->nullable();
+            $table->string('email')->nullable();
+            $table->string('phone')->nullable();
+            $table->softDeletes();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('developers');
+    }
+}
