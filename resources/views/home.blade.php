@@ -381,8 +381,6 @@
 
 @section('footer-scripts')
     <script>
-        AOS.init({disable: 'phone'});
-
         const phone = document.getElementById('phone')
 
         phone.addEventListener('keypress', (e) => phoneMask(e.target.value))
