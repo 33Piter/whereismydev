@@ -14,6 +14,7 @@ Instalação:
 - ./vendor/bin/sail artisan storage:link
 - ./vendor/bin/sail artisan sweetalert:publish
 - ./vendor/bin/sail artisan whereismydev:search (comando para buscar desenvolvedores na api do GitHub)
+- ./vendor/bin/sail artisan horizon
 - configure o mailtrap
 
 
