@@ -27,10 +27,6 @@ class DeveloperResource extends Resource
                 Forms\Components\TextInput::make('github_user_name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('github_profile_url')
-                    ->required()
-                    ->prefix('https://github.com/')
-                    ->maxLength(255),
                 Forms\Components\FileUpload::make('avatar')
                     ->image()
                     ->imagePreviewHeight('50')
