@@ -27,6 +27,19 @@ class Developer extends Model
         'phone',
     ];
 
+
+    /**
+     * Set the user's first name.
+     *
+     * @param  string  $value
+     * @return void
+     */
+    public function setGithubProfileUrlAttribute($value)
+    {
+        $this->attributes['github_profile_url'] = 'https://github.com/'.$value;
+    }
+
+
     /**
      * Get the name of the index associated with the model.
      *

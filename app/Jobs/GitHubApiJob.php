@@ -41,7 +41,7 @@ class GitHubApiJob implements ShouldQueue
 
             Developer::updateOrCreate(
                 ['github_user_name' => $developer['login'], 'github_id' => $developer['id']],
-                ['github_profile_url' => $developer['url'], 'avatar' => $developer['avatar_url']]
+                ['github_profile_url' => $developer['login'], 'avatar' => $developer['avatar_url']]
             );
 
         }

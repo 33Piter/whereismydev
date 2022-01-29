@@ -53,17 +53,16 @@ class DeveloperResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('github_user_name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('github_profile_url'),
                 Tables\Columns\ImageColumn::make('avatar')
                     ->width(50)
                     ->height(50)
                     ->rounded(),
-                Tables\Columns\TextColumn::make('email')
+                Tables\Columns\TextColumn::make('github_user_name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('phone')
-                    ->searchable(),
+                Tables\Columns\TextColumn::make('github_profile_url')
+                    ->url(fn (Developer $record): string => $record['github_profile_url'])
+                    ->openUrlInNewTab(),
+
             ])
             ->filters([
                 //
