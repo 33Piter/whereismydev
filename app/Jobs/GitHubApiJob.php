@@ -18,7 +18,7 @@ class GitHubApiJob implements ShouldQueue
      *
      * @var \App\Models\Developer
      */
-    protected Developer $developers;
+    protected $developers;
 
     /**
      * Create a new job instance.
