@@ -67,6 +67,15 @@ class DeveloperResource extends Resource
             ])
             ->filters([
                 //
+            ])
+            ->pushBulkActions([
+                Tables\Actions\BulkAction::make('Delete all developers')
+                    ->action(function ():void {
+                        Developer::truncate();
+                    })
+                    ->requiresConfirmation()
+                    ->color('danger')
+                    ->icon('heroicon-o-x-circle'),
             ]);
     }
 
