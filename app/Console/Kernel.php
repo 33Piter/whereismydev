@@ -20,7 +20,8 @@ class Kernel extends ConsoleKernel
         $schedule->command(SearchDevelopers::class)
         ->everyFiveMinutes()
         ->after(function() {
-            Artisan::call('queue:work redis --once --tries=3');
+//            Artisan::call('queue:work redis --tries=3');
+            Artisan::call('horizon');
         });
     }
 
