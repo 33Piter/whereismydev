@@ -21,21 +21,20 @@ class Developer extends Model
     protected $fillable = [
         'github_id',
         'github_user_name',
-        'github_profile_url',
         'avatar',
         'email',
         'phone',
     ];
 
-
     /**
-     * Set the user's first name.
+     * Set the developer GitHub profile url.
      *
      * @param  string  $value
      * @return void
      */
-    public function setGithubProfileUrlAttribute($value)
+    public function setGithubUserNameAttribute($value)
     {
+        $this->attributes['github_user_name'] = $value;
         $this->attributes['github_profile_url'] = 'https://github.com/'.$value;
     }
 
