@@ -39,6 +39,11 @@ class SearchDevelopers extends Command
      */
     public function handle()
     {
+        if(!env('GITHUB_TOKEN')){
+            echo "GitHub token not defined in .env file.\n";
+            exit;
+        }
+
         $endpoint = 'https://api.github.com/search/users';
         $query = 'type:"user" language:"laravel" language:"php" repos:>1 repos:1:stars:>9 is:"public" location:"brazil" location:"brasil"';
         $per_page = 100;
