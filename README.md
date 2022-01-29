@@ -13,6 +13,7 @@ Instalação:
 - ./vendor/bin/sail artisan migrate:fresh --seed
 - ./vendor/bin/sail artisan storage:link
 - ./vendor/bin/sail artisan sweetalert:publish
+- gere um personal access token do GitHub (https://github.com/settings/tokens/new) e insira no .enc (em GITHUB_TOKEN)
 - ./vendor/bin/sail artisan whereismydev:search (comando para buscar desenvolvedores na api do GitHub)
 - ./vendor/bin/sail artisan horizon
 - configure o mailtrap
