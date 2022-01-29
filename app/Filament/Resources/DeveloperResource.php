@@ -18,7 +18,7 @@ class DeveloperResource extends Resource
 {
     protected static ?string $model = Developer::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
     public static function form(Form $form): Form
     {
@@ -41,7 +41,7 @@ class DeveloperResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('phone')
                     ->minLength(10)
-                    ->mask(fn (TextInput\Mask $mask) => $mask->pattern('(00)00000-0000'))
+                    ->mask(fn (TextInput\Mask $mask) => $mask->pattern('(00)00000-0000')),
             ]);
     }
 
@@ -64,7 +64,7 @@ class DeveloperResource extends Resource
                 //
             ])
             ->pushBulkActions([
-                Tables\Actions\BulkAction::make('Delete all developers')
+                Tables\Actions\BulkAction::make('Excluir todos')
                     ->action(function ():void {
                         Developer::truncate();
                     })
