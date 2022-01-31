@@ -3,13 +3,7 @@
         <img src="public/assets/whereismydev-logo.png" alt="where is my dev? logo" width="600" />
     </p>
     <p>
-        <!-- uncomment after enabled workflow -->
-        <!--
-        <a href="https://github.com/33Piter/whereismydev/actions/workflows/laravel.yml">
-            <img src="https://github.com/33Piter/whereismydev/actions/workflows/laravel.yml/badge.svg?branch=main" alt="Laravel" style="max-width:100%;" />
-        </a>
-        -->
-        <a href="https://github.com/33Piter/whereismydev/blob/main/LICENSE">
+        <a href="https://github.com/33Piter/whereismydev/blob/master/LICENSE">
             <img alt="GitHub" src="https://img.shields.io/github/license/33Piter/whereismydev" alt="License" style="max-width:100%;" />
         </a>
         <a href="https://github.com/33Piter/whereismydev/commits/main">
