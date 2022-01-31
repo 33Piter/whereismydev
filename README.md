@@ -1,6 +1,6 @@
 <div align="center">
     <p>
-        <img src="public/assets/whereismydev-logo.png" alt="where is my dev? logo" width="180" />
+        <img src="public/assets/whereismydev-logo.png" alt="where is my dev? logo" width="600" />
     </p>
     <p>
         <!-- uncomment after enabled workflow -->
