@@ -13,6 +13,7 @@ class SearchDevelopers extends Command
      *
      * @var string
      */
+
     protected $signature = 'whereismydev:search';
 
     /**
@@ -37,35 +38,68 @@ class SearchDevelopers extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         if(!env('GITHUB_TOKEN')){
             echo "GitHub token not defined in .env file.\n";
             exit;
         }
 
-        $endpoint = 'https://api.github.com/search/users';
-        $query = 'type:"user" language:"laravel" language:"php" repos:>1 repos:1:stars:>9 is:"public" location:"brazil" location:"brasil"';
-        $per_page = 100;
-        $numberOfResults = 300;
+        $devLocations = $this->choice(
+            'What is the location of the devs you are looking for? Choose or type.',
+            ['Brazil', 'United States', 'Canada', 'Argentina', 'India', 'France', 'Germany', 'Italy', 'Japan', 'China'],
+            0,
+            $maxAttempts = null,
+            $allowMultipleSelections = true
+        );
 
-        $page = 1;
+        $devLocationString = '';
+        foreach ($devLocations as $location) {
+            $devLocationString .= 'location:"'.$location.'" ';
+        }
+
+        $devLanguages = $this->choice(
+            'What programming languages or frameworks does the devs need to know? Choose or type.',
+            ['PHP', 'Laravel', 'Javascript', 'Python', 'Java', 'Go', 'C++', 'C#', 'TypeScript'],
+            0,
+            $maxAttempts = null,
+            $allowMultipleSelections = true
+        );
+
+        $devLanguagesString = '';
+        foreach ($devLanguages as $language) {
+            $devLanguagesString .= 'language:"'.$language.'" ';
+        }
+
+        $numberOfRepositories = $this->ask('What is the minimum number of published repositories that devs must have?') ?? 1;
+        $numberOfFollowers = $this->ask('What is the minimum number of followers that devs must have?') ?? 1;
+        $numberOfResults = $this->ask('What is the maximum number of devs you want to find?') ?? 50;
+        $numberOfStars = $this->ask('What is the minimum number of stars in published repositories that devs must have?') ?? 1;
+
+        $endpoint = 'https://api.github.com/search/users';
+        $query = 'type:"user" '.$devLocationString.$devLanguagesString.'repos:=>'. $numberOfRepositories .' followers:'.$numberOfFollowers.' repos:1:stars:=>'.$numberOfStars;
+        $perPage = 100;
+        $actualPage = 1;
         $collection = collect();
         $resultsCount = 0;
 
         while ($resultsCount < $numberOfResults) {
-
             $response = Http::withToken(env('GITHUB_TOKEN'))->get($endpoint, [
                 'q' => $query,
-                'per_page' => $per_page,
-                'page' => $page,
+                'per_page' => $perPage,
+                'page' => $actualPage,
             ]);
-
-            echo "page: $page \n";
-            $collection = $collection->concat($response->collect()['items']);
-            $page++;
-            $resultsCount = $collection->count();
-            echo "resultsCount: $resultsCount \n";
+            if($response->ok()) {
+                echo "page: $actualPage \n";
+                $collection = $collection->concat($response->collect()['items']);
+                $actualPage++;
+                $resultsCount = $collection->count();
+                echo "resultsCount: $resultsCount \n";
+            }
+            else {
+                $this->error('Something went wrong! Try doing a more comprehensive search.');
+                return 0;
+            }
         }
 
         if($collection->isNotEmpty()){
