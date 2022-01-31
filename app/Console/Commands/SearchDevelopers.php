@@ -95,6 +95,9 @@ class SearchDevelopers extends Command
                 $actualPage++;
                 $resultsCount = $collection->count();
                 echo "resultsCount: $resultsCount \n";
+                if ($resultsCount < $perPage){
+                    break;
+                }
             }
             else {
                 $this->error('Something went wrong with the GitHub API!');
