@@ -45,40 +45,36 @@ class SearchDevelopers extends Command
             exit;
         }
 
-        $devLocations = $this->choice(
-            'What is the location of the devs you are looking for? Choose or type.',
+        $devLocation = $this->anticipate(
+            'What is the location of the devs you are looking for? Use arrows to choose or type.',
             ['Brazil', 'United States', 'Canada', 'Argentina', 'India', 'France', 'Germany', 'Italy', 'Japan', 'China'],
-            0,
-            $maxAttempts = null,
-            $allowMultipleSelections = true
+            'Brazil'
         );
 
-        $devLocationString = '';
-        foreach ($devLocations as $location) {
-            $devLocationString .= 'location:"'.$location.'" ';
-        }
-
-        $devLanguages = $this->choice(
-            'What programming languages or frameworks does the devs need to know? Choose or type.',
+        $devLanguage = $this->anticipate(
+            'What programming language or framework does the devs need to know? Use arrows to choose or type.',
             ['PHP', 'Laravel', 'Javascript', 'Python', 'Java', 'Go', 'C++', 'C#', 'TypeScript'],
-            0,
-            $maxAttempts = null,
-            $allowMultipleSelections = true
+            'PHP'
         );
-
-        $devLanguagesString = '';
-        foreach ($devLanguages as $language) {
-            $devLanguagesString .= 'language:"'.$language.'" ';
-        }
 
         $numberOfRepositories = $this->ask('What is the minimum number of published repositories that devs must have?') ?? 1;
         $numberOfFollowers = $this->ask('What is the minimum number of followers that devs must have?') ?? 1;
         $numberOfResults = $this->ask('What is the maximum number of devs you want to find?') ?? 50;
         $numberOfStars = $this->ask('What is the minimum number of stars in published repositories that devs must have?') ?? 1;
 
+        $this->processGitHubApi($devLocation, $devLanguage, $numberOfRepositories, $numberOfFollowers, $numberOfStars, $numberOfResults);
+
+        return 0;
+    }
+
+    private function processGitHubApi($devLocation, $devLanguage, $numberOfRepositories, $numberOfFollowers, $numberOfStars, $numberOfResults): void
+    {
         $endpoint = 'https://api.github.com/search/users';
-        $query = 'type:"user" '.$devLocationString.$devLanguagesString.'repos:=>'. $numberOfRepositories .' followers:'.$numberOfFollowers.' repos:1:stars:=>'.$numberOfStars;
+        $query = 'type:"user" location:'.$devLocation.' language:'.$devLanguage.' repos:=>'. $numberOfRepositories .' followers:'.$numberOfFollowers.' repos:1:stars:=>'.$numberOfStars;
         $perPage = 100;
+        if ($numberOfResults < $perPage){
+            $perPage = $numberOfResults;
+        }
         $actualPage = 1;
         $collection = collect();
         $resultsCount = 0;
@@ -90,22 +86,24 @@ class SearchDevelopers extends Command
                 'page' => $actualPage,
             ]);
             if($response->ok()) {
-                echo "page: $actualPage \n";
                 $collection = $collection->concat($response->collect()['items']);
+                if ($collection->isEmpty()) {
+                    $this->error('No dev was found! Try doing a more comprehensive search.');
+                    exit;
+                }
+                echo "page: $actualPage \n";
                 $actualPage++;
                 $resultsCount = $collection->count();
                 echo "resultsCount: $resultsCount \n";
             }
             else {
-                $this->error('Something went wrong! Try doing a more comprehensive search.');
-                return 0;
+                $this->error('Something went wrong with the GitHub API!');
+                return;
             }
         }
 
         if($collection->isNotEmpty()){
             GitHubApiJob::dispatch($collection)->onConnection('redis');
         }
-
-        return 0;
     }
 }
